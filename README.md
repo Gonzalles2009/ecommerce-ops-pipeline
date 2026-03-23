@@ -2,6 +2,8 @@
 
 8 disconnected data sources → one interactive dashboard with cross-filtering.
 
+**[Live Demo](https://gonzalles2009.github.io/ecommerce-ops-pipeline/)** — open in browser, click states on the map, switch periods.
+
 ![Dashboard Overview](docs/hero-top.png)
 
 ## The Problem
