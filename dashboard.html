@@ -237,8 +237,9 @@ body {
   color: var(--ink-dim);
   text-transform: uppercase;
   letter-spacing: 1px;
-  float: right;
+  display: block;
   margin-top: 4px;
+  text-align: right;
 }
 
 /* Tables */
@@ -282,9 +283,11 @@ tr.state-highlight td {
   text-transform: uppercase; letter-spacing: 0.5px;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1200px) and (min-width: 1025px) {
   .kpi-row { grid-template-columns: repeat(3, 1fr); }
-  .row-2-1, .row-1-1, .row-3, .row-map { grid-template-columns: 1fr; }
+  .row-2-1 { grid-template-columns: 1fr 1fr; }
+  .row-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .row-map { grid-template-columns: 1fr 2fr; }
   .filter-bar { flex-wrap: wrap; }
 }
 
@@ -479,9 +482,312 @@ tr.state-highlight td {
   position: sticky; left: 0; z-index: 2;
 }
 
+/* ========================================================================
+   MOBILE BANNER
+   ======================================================================== */
+.mobile-banner {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  margin-bottom: 16px;
+  background: var(--navy);
+  color: #fff;
+  border: var(--border);
+  box-shadow: var(--shadow);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  line-height: 1.4;
+}
+
+.mobile-banner .banner-icon {
+  font-size: 13px;
+  margin-right: 4px;
+}
+
+.mobile-banner button {
+  background: var(--cream);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 18px;
+  font-weight: 700;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-left: 12px;
+}
+
+.mobile-banner button:active {
+  background: var(--red);
+  color: #fff;
+}
+
+/* ========================================================================
+   SCROLL INDICATOR for heatmaps
+   ======================================================================== */
+.scroll-hint {
+  display: none;
+  text-align: center;
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--ink-dim);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 6px 0 2px;
+}
+
+/* ========================================================================
+   TABLET: 768px - 1024px
+   ======================================================================== */
+@media (max-width: 1024px) {
+  body { padding: 20px; }
+
+  .row-3 { grid-template-columns: 1fr 1fr; }
+  .row-map { grid-template-columns: 1fr 1fr; }
+  .row-1-1 { grid-template-columns: 1fr 1fr; }
+
+  .card-stack {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .card-stack > .card { margin-bottom: 0 !important; }
+
+  .heatmap-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .scroll-hint { display: block; }
+
+  .header h1 { font-size: 26px; }
+}
+
+/* ========================================================================
+   MOBILE: < 768px
+   ======================================================================== */
+@media (max-width: 768px) {
+  /* Show mobile banner */
+  .mobile-banner { display: flex; }
+
+  body { padding: 12px; overflow-x: hidden; }
+
+  /* Prevent elements from overflowing viewport */
+  .card { max-width: calc(100vw - 24px); overflow-x: auto; }
+  canvas { max-width: 100% !important; }
+
+  /* --- Header: stack vertically --- */
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding-bottom: 12px;
+  }
+  .header h1 { font-size: 22px; }
+  .header .meta { text-align: left; }
+
+  /* --- Summary strip: 2-column grid --- */
+  .summary-strip {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 12px;
+    padding: 12px;
+  }
+  .summary-strip .sep { display: none; }
+  .summary-strip .metric-group {
+    display: flex;
+    align-items: center;
+    padding: 6px 0;
+    min-height: 36px;
+  }
+
+  /* --- Filter bar: stack vertically --- */
+  .filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding: 12px;
+  }
+  .filter-bar .filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .filter-bar select {
+    width: 100%;
+    min-height: 44px;
+    font-size: 14px;
+    padding: 10px 32px 10px 12px;
+  }
+  .filter-bar .filter-sep { display: none; }
+  .filter-bar .active-tag {
+    margin-left: 0;
+    text-align: center;
+    padding: 4px 0;
+  }
+
+  /* --- All grid rows: single column --- */
+  .row-map,
+  .row-2-1,
+  .row-1-1,
+  .row-3 {
+    grid-template-columns: 1fr;
+  }
+
+  /* --- Card stack: single column on mobile --- */
+  .card-stack {
+    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .card-stack > .card { margin-bottom: 0 !important; }
+
+  /* --- Cards: reduce shadow, tighten padding --- */
+  .card {
+    padding: 12px;
+    box-shadow: var(--shadow-sm);
+  }
+  .card:hover {
+    transform: none;
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* --- Brazil cartogram: bigger cells for touch --- */
+  .cartogram-grid {
+    max-width: 100%;
+    gap: 4px;
+  }
+  .cartogram-cell {
+    font-size: 10px;
+    min-width: 36px;
+    min-height: 36px;
+  }
+
+  /* --- Monthly Revenue chart: good height --- */
+  .chart-wrapper { min-height: 250px; }
+
+  /* --- Tables: scrollable wrapper --- */
+  #table-states,
+  #table-categories {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Hide less critical columns on mobile: Delivery + Orders from state table */
+  #table-states table th:nth-child(2),
+  #table-states table td:nth-child(2),
+  #table-states table th:nth-child(4),
+  #table-states table td:nth-child(4) {
+    display: none;
+  }
+
+  /* Hide Items column from categories table */
+  #table-categories table th:nth-child(2),
+  #table-categories table td:nth-child(2) {
+    display: none;
+  }
+
+  /* --- Heatmaps: horizontal scroll with sticky first column --- */
+  .heatmap-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border: 1.5px solid rgba(0,0,0,0.1);
+  }
+
+  .heatmap .hm-label {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    min-width: 48px;
+  }
+  .heatmap .hm-corner {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    min-width: 48px;
+  }
+
+  .scroll-hint { display: block; }
+
+  /* --- Charts: ensure readable height --- */
+  #chart-delivery,
+  #chart-late,
+  #chart-reviews,
+  #chart-gap {
+    min-height: 180px;
+  }
+
+  /* --- Footer: stack vertically --- */
+  .footer {
+    flex-direction: column;
+    gap: 6px;
+    text-align: center;
+  }
+
+  /* --- Touch improvements --- */
+  .cartogram-cell,
+  .filter-bar select,
+  .badge {
+    cursor: pointer;
+    -webkit-tap-highlight-color: rgba(0,0,0,0.1);
+  }
+
+  /* Map tooltip: position better on mobile */
+  .map-tooltip {
+    font-size: 10px;
+    padding: 6px 10px;
+  }
+}
+
+/* ========================================================================
+   SMALL MOBILE: < 420px (iPhone SE class)
+   ======================================================================== */
+@media (max-width: 420px) {
+  body { padding: 8px; }
+
+  .header h1 { font-size: 19px; }
+
+  .summary-strip {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+  .summary-strip .metric-group {
+    justify-content: space-between;
+    padding: 4px 0;
+  }
+
+  .cartogram-cell {
+    font-size: 9px;
+    min-width: 32px;
+    min-height: 32px;
+  }
+
+  .card h3 { font-size: 13px; }
+  .card h3 .sub { font-size: 8px; }
+
+  table { font-size: 11px; }
+  th { font-size: 8px; padding: 5px 6px; }
+  td { padding: 6px; }
+
+  .heatmap { font-size: 8px; }
+  .heatmap td { padding: 3px 4px; font-size: 8px; }
+  .heatmap th { font-size: 7px; padding: 2px 4px; }
+}
+
 </style>
 </head>
 <body>
+
+<!-- Mobile banner: shown only on < 768px via CSS -->
+<div id="mobile-banner" class="mobile-banner">
+  <span><span class="banner-icon">&#9654;</span> Best viewed on desktop. Tap &times; to see mobile-adapted version.</span>
+  <button onclick="this.parentElement.style.display='none'" aria-label="Dismiss">&times;</button>
+</div>
 
 <div class="header">
   <div>
@@ -575,6 +881,7 @@ tr.state-highlight td {
 <div class="row" style="margin-bottom: 12px;">
   <div class="card" style="margin-bottom: 0;">
     <h3>Revenue by State &times; Month <span class="sub">top 10 states &mdash; responds to filters</span></h3>
+    <div class="scroll-hint">&larr; scroll &rarr;</div>
     <div class="heatmap-wrap" id="heatmap-revenue-wrap">
       <div id="heatmap-revenue"></div>
     </div>
@@ -596,6 +903,7 @@ tr.state-highlight td {
 <div class="row row-1-1">
   <div class="card">
     <h3>Orders by Day &times; Hour <span class="sub">all-time pattern &mdash; static</span></h3>
+    <div class="scroll-hint">&larr; scroll &rarr;</div>
     <div class="heatmap-wrap">
       <div id="heatmap-dow"></div>
     </div>
